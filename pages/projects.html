@@ -11,9 +11,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css" />
-  <link rel="stylesheet" href="assets/css/desktop-ui.css" media="screen and (min-width: 1025px)" />
-  <link rel="stylesheet" href="assets/css/mobile-ui.css" media="screen and (max-width: 1024px)" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/desktop-ui.css" media="screen and (min-width: 1025px)" />
+  <link rel="stylesheet" href="/assets/css/mobile-ui.css" media="screen and (max-width: 1024px)" />
   <style>
     .projects-hero {
       text-align: center;
@@ -285,8 +285,8 @@
       currentMode = mode;
 
       const templateFile = mode === 'mobile'
-        ? 'templetes/mobile-ui.html'
-        : 'templetes/desktop-ui.html';
+        ? '/templetes/mobile-ui.html'
+        : '/templetes/desktop-ui.html';
 
       try {
         const res = await fetch(templateFile);
@@ -311,7 +311,7 @@
         // Mark Projects as active nav link
         document.querySelectorAll('.navmenu a').forEach(a => {
           a.classList.remove('active');
-          if (a.getAttribute('href') === 'projects.html') a.classList.add('active');
+          if (a.getAttribute('href') === '/pages/projects.html') a.classList.add('active');
         });
 
         initTheme();

@@ -191,7 +191,7 @@
     async function loadUI() {
       const templateName = currentMode === 'mobile' ? 'mobile-ui.html' : 'desktop-ui.html';
       try {
-        const response = await fetch(`templetes/${templateName}`);
+        const response = await fetch(`/templetes/${templateName}`);
         if (!response.ok) throw new Error("Failed to load template");
         const html = await response.text();
         
@@ -212,6 +212,12 @@
         footerPlaceholder.innerHTML = '';
         const newFooter = doc.querySelector('footer');
         if (newFooter) footerPlaceholder.appendChild(newFooter.cloneNode(true));
+        
+        // Mark Home as active nav link
+        document.querySelectorAll('.navmenu a').forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === '/index.html') a.classList.add('active');
+        });
 
         initTheme();
         window.dispatchEvent(new Event('scroll'));

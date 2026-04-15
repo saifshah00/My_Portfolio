@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder – Saifullah Anowar</title>
+  <meta name="description" content="Build your resume dynamically." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/desktop-ui.css" media="screen and (min-width: 1025px)" />
+  <link rel="stylesheet" href="/assets/css/mobile-ui.css" media="screen and (max-width: 1024px)" />
+  <style>
+    .builder-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      padding: 2rem 0 6rem;
+    }
+
+    .editor-card, .preview-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    [data-theme="dark"] .editor-card, [data-theme="dark"] .preview-card {
+       background: linear-gradient(135deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.7));
+    }
+
+    .editor-section {
+      margin-bottom: 2rem;
+    }
+
+    .editor-section h3 {
+      font-family: var(--font-heading);
+      color: var(--accent);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--text-dim);
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    [data-theme="dark"] .form-group input, [data-theme="dark"] .form-group textarea {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    /* Resume Preview Styles */
+    .resume-preview {
+      background: #fff;
+      color: #333;
+      padding: 3rem;
+      border-radius: 8px;
+      min-height: 800px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    /* Print logic */
+    .print-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 1rem;
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s;
+    }
+
+    .print-btn:hover { background: var(--accent-light); }
+
+    /* The preview elements */
+    #pv-name { font-size: 2.5rem; font-weight: bold; margin-bottom: 0.2rem; color: #111; }
+    #pv-title { font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
+    #pv-contact { font-size: 0.9rem; color: #555; border-bottom: 2px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    
+    .pv-section-title { font-size: 1.2rem; font-weight: bold; color: #111; border-bottom: 1px solid #ddd; padding-bottom: 0.3rem; margin: 1.5rem 0 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+    #pv-summary { font-size: 0.95rem; line-height: 1.6; }
+    #pv-skills { font-size: 0.95rem; line-height: 1.6; white-space: pre-line; }
+    #pv-experience { font-size: 0.95rem; line-height: 1.6; white-space: pre-line;}
+
+    @media (max-width: 1024px) {
+      .builder-container { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #header, #footer-placeholder, .editor-card, .layout, .projects-hero { display: none !important; }
+      .resume-preview, .resume-preview * { visibility: visible; }
+      .resume-preview { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; margin: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header-placeholder"></div>
+
+  <div class="layout">
+    <main class="main">
+      <div class="projects-hero" style="padding-bottom: 0;">
+        <h1>Resume <span class="accent-text">Builder</span></h1>
+        <p>Fill out the form to instantly generate a clean, print-ready resume PDF completely within your browser.</p>
+      </div>
+
+      <div class="builder-container">
+        <!-- Editor Side -->
+        <div class="editor-card">
+          <div class="editor-section">
+            <h3>Personal Info</h3>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="in-name" value="Saifullah Anowar" onkeyup="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>Professional Title</label>
+              <input type="text" id="in-title" value="Accountant & ERP Specialist" onkeyup="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>Contact Info (Email, Phone, Location)</label>
+              <input type="text" id="in-contact" value="info@saifit.org | +880 123456789 | Dhaka, BD" onkeyup="updateCV()">
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <h3>Professional Summary</h3>
+            <div class="form-group">
+              <textarea id="in-summary" rows="4" onkeyup="updateCV()">Experienced accounting professional with deep expertise in Tally Prime and ERP Next. Proven track record of streamlining financial operations and automating reports.</textarea>
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <h3>Skills & Tools</h3>
+            <div class="form-group">
+              <textarea id="in-skills" rows="4" onkeyup="updateCV()">- Tally Prime (Advanced)&#13;&#10;- ERP Next Configuration&#13;&#10;- Advanced MS Excel (Pivot, VLOOKUP, Macros)&#13;&#10;- Financial Modeling</textarea>
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <h3>Experience</h3>
+            <div class="form-group">
+              <textarea id="in-experience" rows="6" onkeyup="updateCV()">Senior Accountant at TechGear Ltd. (2021 - Present)&#13;&#10;- Managed daily ledgers and AP/AR entries.&#13;&#10;- Implemented ERP Next across 3 departments.&#13;&#10;&#13;&#10;Junior Accountant at BD Finance (2018 - 2021)&#13;&#10;- Handled tax filings and MS Excel reporting.</textarea>
+            </div>
+          </div>
+
+          <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+
+        <!-- Preview Side -->
+        <div class="preview-card" style="padding:0; background:transparent; border:none; box-shadow:none;">
+          <div class="resume-preview" id="resume-preview">
+            <div id="pv-name">Saifullah Anowar</div>
+            <div id="pv-title">Accountant & ERP Specialist</div>
+            <div id="pv-contact" style="margin-bottom: 25px;">info@saifit.org | +880 123456789 | Dhaka, BD</div>
+
+            <div class="pv-section-title">Professional Summary</div>
+            <div id="pv-summary" style="margin-bottom: 25px;">Experienced accounting professional with deep expertise in Tally Prime and ERP Next...</div>
+
+            <div class="pv-section-title">Core Skills</div>
+            <div id="pv-skills" style="margin-bottom: 25px;">- Tally Prime&#13;&#10;- ERP Next</div>
+
+            <div class="pv-section-title">Work Experience</div>
+            <div id="pv-experience">- Handled tax filings and MS Excel reporting.</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Live update function inside the builder
+    function updateCV() {
+      document.getElementById('pv-name').innerText = document.getElementById('in-name').value || 'Your Name';
+      document.getElementById('pv-title').innerText = document.getElementById('in-title').value || 'Professional Title';
+      document.getElementById('pv-contact').innerText = document.getElementById('in-contact').value || 'Contact Details';
+      document.getElementById('pv-summary').innerText = document.getElementById('in-summary').value;
+      document.getElementById('pv-skills').innerText = document.getElementById('in-skills').value;
+      document.getElementById('pv-experience').innerText = document.getElementById('in-experience').value;
+    }
+    updateCV(); // init immediately
+
+    // Main App Logic
+    let currentMode = null;
+    async function loadUI() {
+      const mode = window.innerWidth <= 1024 ? 'mobile' : 'desktop';
+      if (mode === currentMode) return;
+      currentMode = mode;
+
+      const templateFile = mode === 'mobile' ? '/templetes/mobile-ui.html' : '/templetes/desktop-ui.html';
+
+      try {
+        const res = await fetch(templateFile);
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+        const headerPlaceholder = document.getElementById('header-placeholder');
+        headerPlaceholder.innerHTML = '';
+        const newHeader = doc.querySelector('header');
+        if (newHeader) headerPlaceholder.appendChild(newHeader.cloneNode(true));
+
+        if (currentMode === 'mobile') {
+          const newNav = doc.querySelector('nav');
+          if (newNav) headerPlaceholder.appendChild(newNav.cloneNode(true));
+        }
+
+        const footerPlaceholder = document.getElementById('footer-placeholder');
+        footerPlaceholder.innerHTML = '';
+        const newFooter = doc.querySelector('footer');
+        if (newFooter) footerPlaceholder.appendChild(newFooter.cloneNode(true));
+
+        // Mark Build as active nav link
+        document.querySelectorAll('.navmenu a').forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === '/pages/build.html') a.classList.add('active');
+        });
+
+        initTheme();
+      } catch (err) {
+        console.error("Loader Error:", err);
+      }
+    }
+
+    loadUI();
+
+    window.addEventListener('resize', () => {
+      const newMode = window.innerWidth <= 1024 ? 'mobile' : 'desktop';
+      if (newMode !== currentMode) { currentMode = newMode; loadUI(); }
+    });
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme || systemTheme);
+    }
+
+    function toggleTheme() {
+      const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+    
+    function toggleMenu() {
+      const menu = document.getElementById('navmenu');
+      if (menu) menu.classList.toggle('visible');
+    }
+  </script>
+</body>
+
+</html>
