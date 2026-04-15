@@ -81,55 +81,135 @@
       border-color: var(--accent);
     }
 
-    /* Resume Preview Styles */
+    /* Resume Preview Styles matching saif.pdf */
     .resume-preview {
       background: #fff;
-      color: #333;
-      padding: 3rem;
-      border-radius: 8px;
-      min-height: 800px;
+      color: #000;
+      padding: 40px 50px;
+      border-radius: 4px;
+      min-height: 842px; /* A4 height approx */
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.4;
+      text-align: left;
     }
 
-    /* Print logic */
-    .print-btn {
-      display: inline-block;
-      width: 100%;
-      padding: 1rem;
-      background: var(--accent);
-      color: white;
+    .resume-preview p {
+      margin-bottom: 5px;
+    }
+
+    #pv-header {
       text-align: center;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 1rem;
-      transition: background 0.3s;
+      margin-bottom: 20px;
     }
 
-    .print-btn:hover { background: var(--accent-light); }
+    .pv-resume-of {
+      font-family: 'Aptos', 'Segoe UI', sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
 
-    /* The preview elements */
-    #pv-name { font-size: 2.5rem; font-weight: bold; margin-bottom: 0.2rem; color: #111; }
-    #pv-title { font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
-    #pv-contact { font-size: 0.9rem; color: #555; border-bottom: 2px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    #pv-name { 
+      font-family: 'Aptos', 'Segoe UI', sans-serif;
+      font-size: 19px; 
+      font-weight: bold; 
+      margin-bottom: 5px; 
+      text-transform: uppercase;
+    }
+
+    #pv-contact { 
+      font-size: 11px; 
+      color: #000; 
+    }
+
+    .pv-section-title { 
+      font-family: 'Aptos', 'Segoe UI', sans-serif;
+      font-size: 13.5px; 
+      font-weight: bold; 
+      color: #000; 
+      border-bottom: 1px solid #000; 
+      padding-bottom: 2px; 
+      margin: 18px 0 8px; 
+      text-transform: uppercase; 
+    }
     
-    .pv-section-title { font-size: 1.2rem; font-weight: bold; color: #111; border-bottom: 1px solid #ddd; padding-bottom: 0.3rem; margin: 1.5rem 0 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-    #pv-summary { font-size: 0.95rem; line-height: 1.6; }
-    #pv-skills { font-size: 0.95rem; line-height: 1.6; white-space: pre-line; }
-    #pv-experience { font-size: 0.95rem; line-height: 1.6; white-space: pre-line;}
+    #pv-summary { 
+      font-size: 12px; 
+      line-height: 1.5; 
+      text-align: justify;
+    }
+
+    #pv-skills { 
+      font-size: 12px; 
+      line-height: 1.5; 
+      white-space: pre-line; 
+      padding-left: 20px;
+    }
+
+    .pv-job {
+      margin-bottom: 15px;
+    }
+
+    .pv-job-company {
+      font-family: 'Aptos', 'Segoe UI', sans-serif;
+      font-size: 13px;
+      font-weight: bold;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    .pv-job-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 15px;
+      margin-bottom: 4px;
+    }
+
+    .pv-job-title {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .pv-job-date {
+      font-size: 10px;
+      font-weight: bold;
+      color: #545454;
+    }
+
+    .pv-job-desc {
+      font-size: 12px;
+      padding-left: 15px;
+      margin-bottom: 4px;
+      text-align: justify;
+    }
+
+    .pv-job-tasks {
+      font-size: 12px;
+      white-space: pre-line;
+      padding-left: 35px; /* Deeper indent for responsibilities */
+    }
 
     @media (max-width: 1024px) {
       .builder-container { grid-template-columns: 1fr; }
+      .resume-preview { padding: 25px; }
     }
 
     @media print {
       body * { visibility: hidden; }
-      #header, #footer-placeholder, .editor-card, .layout, .projects-hero { display: none !important; }
+      #header, #footer-placeholder, .editor-card, .layout::before, .projects-hero { display: none !important; }
       .resume-preview, .resume-preview * { visibility: visible; }
-      .resume-preview { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; margin: 0; }
+      .resume-preview { 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100%; 
+        box-shadow: none; 
+        padding: 0; 
+        margin: 0; 
+      }
+      @page { margin: 1cm; size: A4; }
     }
   </style>
 </head>
@@ -180,7 +260,30 @@
           <div class="editor-section">
             <h3>Experience</h3>
             <div class="form-group">
-              <textarea id="in-experience" rows="6" onkeyup="updateCV()">Senior Accountant at TechGear Ltd. (2021 - Present)&#13;&#10;- Managed daily ledgers and AP/AR entries.&#13;&#10;- Implemented ERP Next across 3 departments.&#13;&#10;&#13;&#10;Junior Accountant at BD Finance (2018 - 2021)&#13;&#10;- Handled tax filings and MS Excel reporting.</textarea>
+              <label>Company / Organization</label>
+              <input type="text" id="in-exp-company" value="Excellent Ceramics Group (Halim Group)" onkeyup="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>Company Description</label>
+              <textarea id="in-exp-desc" rows="2" onkeyup="updateCV()">Established in 2010 in Dhaka, one of Bangladesh's largest manufacturers of sanitary ware and tiles.</textarea>
+            </div>
+            <div style="display:flex; gap:1rem;">
+              <div class="form-group" style="flex:1;">
+                <label>Job Title</label>
+                <input type="text" id="in-exp-title" value="Executive - Accounts & Finance" onkeyup="updateCV()">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>Duration / Dates</label>
+                <input type="text" id="in-exp-dates" value="[ 01-07-2025  to  01-01-2026 ]" onkeyup="updateCV()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Job Description (Tasks)</label>
+              <textarea id="in-exp-tasks" rows="6" onkeyup="updateCV()">- Daily Sales Invoice Entry
+- Daily Receivable Entry
+- Supplier Payment Entry
+- Monthly Dealer Commission Preparation
+- Check & Verify Daily Accounts Activities.</textarea>
             </div>
           </div>
 
@@ -190,18 +293,29 @@
         <!-- Preview Side -->
         <div class="preview-card" style="padding:0; background:transparent; border:none; box-shadow:none;">
           <div class="resume-preview" id="resume-preview">
-            <div id="pv-name">Saifullah Anowar</div>
-            <div id="pv-title">Accountant & ERP Specialist</div>
-            <div id="pv-contact" style="margin-bottom: 25px;">info@saifit.org | +880 123456789 | Dhaka, BD</div>
+            <div id="pv-header">
+              <div class="pv-resume-of">RESUME OF</div>
+              <div id="pv-name">Saifullah Anowar</div>
+              <div id="pv-contact" style="white-space: pre-wrap;">01817275304 | 167/B, Hatirpool, Dhaka-1205&#10;saifshahcma@gmail.com</div>
+            </div>
 
             <div class="pv-section-title">Professional Summary</div>
-            <div id="pv-summary" style="margin-bottom: 25px;">Experienced accounting professional with deep expertise in Tally Prime and ERP Next...</div>
+            <div id="pv-summary">Motivated accounting student with hands-on experience in core finance & accounts operations...</div>
+
+            <div class="pv-section-title">Job Experience</div>
+            <div class="pv-job">
+              <div class="pv-job-company" id="pv-exp-company">Excellent Ceramics Group (Halim Group)</div>
+              <div class="pv-job-desc" id="pv-exp-desc">Established in 2010...</div>
+              <div class="pv-job-row">
+                <div class="pv-job-title" id="pv-exp-title">Executive - Accounts & Finance</div>
+                <div class="pv-job-date" id="pv-exp-dates">[ 01-07-2025 to 01-01-2026 ]</div>
+              </div>
+              <div style="font-size: 11px; font-weight:bold; font-style: italic; margin: 6px 0 4px 15px;">JOB DESCRIPTION :-</div>
+              <div class="pv-job-tasks" id="pv-exp-tasks">- task 1</div>
+            </div>
 
             <div class="pv-section-title">Core Skills</div>
-            <div id="pv-skills" style="margin-bottom: 25px;">- Tally Prime&#13;&#10;- ERP Next</div>
-
-            <div class="pv-section-title">Work Experience</div>
-            <div id="pv-experience">- Handled tax filings and MS Excel reporting.</div>
+            <div id="pv-skills">- Tally Prime&#10;- ERP Next</div>
           </div>
         </div>
       </div>
@@ -215,11 +329,15 @@
     // Live update function inside the builder
     function updateCV() {
       document.getElementById('pv-name').innerText = document.getElementById('in-name').value || 'Your Name';
-      document.getElementById('pv-title').innerText = document.getElementById('in-title').value || 'Professional Title';
       document.getElementById('pv-contact').innerText = document.getElementById('in-contact').value || 'Contact Details';
       document.getElementById('pv-summary').innerText = document.getElementById('in-summary').value;
       document.getElementById('pv-skills').innerText = document.getElementById('in-skills').value;
-      document.getElementById('pv-experience').innerText = document.getElementById('in-experience').value;
+      
+      document.getElementById('pv-exp-company').innerText = document.getElementById('in-exp-company').value;
+      document.getElementById('pv-exp-desc').innerText = document.getElementById('in-exp-desc').value;
+      document.getElementById('pv-exp-title').innerText = document.getElementById('in-exp-title').value;
+      document.getElementById('pv-exp-dates').innerText = document.getElementById('in-exp-dates').value;
+      document.getElementById('pv-exp-tasks').innerText = document.getElementById('in-exp-tasks').value;
     }
     updateCV(); // init immediately
 
